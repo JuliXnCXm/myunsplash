@@ -5,10 +5,9 @@ import { apiPhotos} from '../context/Api'
 
 const usePhotos = () => {
     const [photos, setPhotos] = useState([])
-    const [query, setQuery] = useState('')
     const [ formPassword, setFormPassword ] = useState( { password: '' } )
     const [ showAlert, setShowAlert ] = useState( false )
-
+    const [loadingPhotos, setLoadingPhotos] = useState(true)
 
     useEffect(() => {
         axios.get(apiPhotos,{
@@ -20,6 +19,9 @@ const usePhotos = () => {
         }).then(
             res => {
                 setPhotos(res.data.photos)
+                setTimeout(() => {
+                    setLoadingPhotos(false)
+                }, 2000)
             }
             ).catch(
                 err => {
@@ -63,7 +65,7 @@ const usePhotos = () => {
 
     return {
         photos,
-        setQuery,
+        loadingPhotos,
         handleDelete,
         handleSubmit,
         handleForm,

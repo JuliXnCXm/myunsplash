@@ -1,84 +1,73 @@
-import {React, useState, useMemo } from 'react'
-import usePhotos from '../hooks/usePhotos'
-import Modal from './Modal'
-import '../styles/photos.css'
+import { React, useState, useMemo, useContext } from "react";
+import usePhotos from "../hooks/usePhotos";
+import Modal from "./Modal";
+import "../styles/photos.css";
+import AuthContext from "../context/AuthContext";
+import PhotoAditionalInfo from "./PhotoAditionalInfo";
+import Skeleton from "./Skeleton";
 
+const Photos = () => {
+    const { query } = useContext(AuthContext);
+    const {
+        photos,
+        loadingPhotos,
+    } = usePhotos();
+    const [filteredPhotos, setFilteredPhotos] = useState(photos);
+    const [showModal, setShowModal] = useState(false);
+    const [photoOverview, setPhotoOverview] = useState({});
 
-const Photos = ({query}) => {
-    const {photos , handleForm,handleSubmit,formPassword,showAlert} = usePhotos();
-    const [ filteredPhotos, setFilteredPhotos ] = useState( photos )
-    const [showModal, setShowModal] = useState(false)
-    const [photoToDelete, setPhotoToDelete] = useState({})
+    const handleCloseModal = () => {
+        document.body.style.overflowY = "scroll";
+        setShowModal(false);
+    };
 
-    const style = {
-        backgroundColor: '#f8d7da',
-    }
-
-    useMemo( () =>
-    {
-        const result = photos.filter( photo =>
-        {
-            return photo.photoname.toLowerCase().includes(query )
-        } )
-        setFilteredPhotos( result )
-    }
-        , [ photos, query ] )
+    useMemo(() => {
+        const result = photos.filter((photo) => {
+        return photo.photoname.toLowerCase().includes(query);
+        });
+        setFilteredPhotos(result);
+    }, [photos, query]);
 
     return (
         <>
-            <div className='photos--container'>
+        <div className="photos--container">
+            {loadingPhotos ? (
+            <Skeleton />
+            ) : (
+            <>
                 {filteredPhotos.map((photo, index) => {
-                            return (
-                                <div key={index} className='container--image'>
-                                    <img src={`${photo.photourl}`} alt="" />
-                            <div className='infoContainer'>
-                                <button onClick={() => {
-                                    setShowModal(true)
-                                    setPhotoToDelete(photo)
-                                }
-                                } >Delete</button>
-                                <span>{photo.photoname}</span>
-                            </div>
-                        </div>)
-                })}
-            </div>
-            { showModal ?
-                <Modal>
-                    <div className='deletePhotoContainer'  >
-                        <h2>Are you sure?</h2>
-                        <form onSubmit={(e) => {
-                            handleSubmit(e,photoToDelete)
-                        }} action="">
-                            <label htmlFor="">Password</label>
-                            { showAlert ?
-                            <input
-                            type="password"
-                            placeholder='*********************'
-                            name="password"
-                            style={style}
-                            value={formPassword.password}
-                            onChange={handleForm} />
-                            :
-                            <input
-                            type="password"
-                            placeholder='*********************'
-                            name="password"
-                            value={formPassword.password}
-                            onChange={handleForm} />
-                            }
-                            <div className="buttons" >
-                                <button type="submit" id="buttonDelete">Delete</button>
-                                <button  onClick={() => {
-                                    setShowModal(false)
-                            }}>Cancel</button>
-                            </div>
-                        </form>
+                return (
+                    <div key={index} className="container--image">
+                    <img
+                        src={photo.photourl}
+                        alt=""
+                        onClick={() => {
+                        setPhotoOverview(photo);
+                        setShowModal(true);
+                        }}
+                    />
+                    <div className="infoContainer" onClick={() => {
+                        setPhotoOverview(photo);
+                        setShowModal(true);
+                        }}>
+                        <span>{photo.photoname}</span>
                     </div>
-                </Modal>
-            : null }
+                    </div>
+                );
+                })}
+            </>
+            )}
+        </div>
+        {showModal & !loadingPhotos && (
+            <Modal>
+            <PhotoAditionalInfo
+                photo={photoOverview}
+                handleClose={handleCloseModal}
+            />
+            </Modal>
+        )}
         </>
-    )
+    );
+};
 
-}
-
-export default Photos
+export default Photos;

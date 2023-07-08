@@ -6,6 +6,8 @@ const AuthContext = createContext()
 const AuthProvider = ({children}) => {
 
     const [auth,setAuth] = useState(false)
+    const [query, setQuery] = useState("")
+    
     useEffect(() => {
         let token = localStorage.getItem( 'token' )
         if (token !== null && token !== undefined) {
@@ -49,7 +51,7 @@ const AuthProvider = ({children}) => {
         }).finally()
     }
 
-    const data = {handleLogin,handleRegister,auth}
+    const data = {handleLogin,handleRegister,auth,query,setQuery}
 
     return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>
 }

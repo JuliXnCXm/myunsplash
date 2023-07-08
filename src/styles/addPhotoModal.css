@@ -10,6 +10,9 @@
     position: fixed;
     top: 20%;
     left: 30%;
+    display: grid;
+    align-items: center;
+    justify-items: center;
     padding-right: 40px;
     z-index: 1;
 }
@@ -25,6 +28,16 @@
     display: flex;
 }
 
+.addPhoto--form div {
+    width: 100%;
+}
+
+.addPhoto--form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .addPhoto--form__input {
     border: 1px solid #4F4F4F;
     box-sizing: border-box;
@@ -32,11 +45,13 @@
     border-radius: 12px;
     height: 40px;
     margin-bottom: 15px;
+    padding: 10px;
 }
 
 .buttons {
     position: relative;
     display: flex;
+    width: fit-content !important;
     flex-direction: row-reverse;
 }
 .buttons button {
@@ -69,13 +84,24 @@ input[type="file"] {
 
 #buttonCancel {
     border: none;
-    background: #FFFFFF;
+    background-color: #FFFFFF;
     box-shadow: none;
     color: #BDBDBD;
 }
 
+#buttonCancel:hover {
+    background-color: #eb3e3e;
+    color: white;
+    transition-duration: 2000ms;
+}
+
 #buttonSubmit {
     background: #3DB46D;
+}
+
+#buttonSubmit:hover {
+    transform: scale(1.1);
+    transition-duration: 1000ms;
 }
 
 #buttonChooseFile label {
@@ -95,4 +121,13 @@ input[type="file"] {
     line-height: 22px;
     color: white;
     cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+    .modalContainer {
+        width: 60%;
+        top: 25%;
+        left: 15%;
+        height: 340px;
+    }
 }
