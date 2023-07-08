@@ -63,9 +63,18 @@ const usePhotos = () => {
         }
     }
 
+    const retrievePhoto = async (photo) => {
+        let resp = await fetch(`${apiPhotos}/${photo}`, {
+        })
+        if (resp.status === 200) {
+            return resp
+        }
+    }
+
     return {
         photos,
         loadingPhotos,
+        retrievePhoto,
         handleDelete,
         handleSubmit,
         handleForm,

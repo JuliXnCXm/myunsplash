@@ -1,19 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import "../styles/photoAditionalInfo.css"
-import axios from 'axios'
+import usePhotos from '../hooks/usePhotos'
 const PhotoAditionalInfo = ({photo, handleClose}) => {
-    const [urlToDownload, setUrlToDownload] = useState("")
+    
+    const {retrievePhoto } = usePhotos()
 
-    const handleDownload = (url) => {
-        console.log(url)
-        axios({
-            url: url,
-            method: "GET",
-        }).then((response) => {
-            console.log(response)
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            return url
-        });
+    const handleDownload = () => {
+        console.log(retrievePhoto(photo.photoname))
     }
 
     return (
@@ -41,9 +34,6 @@ const PhotoAditionalInfo = ({photo, handleClose}) => {
                         </span>
                     </li>
                 </ul>
-                <span>
-                    <span className="material-icons material-icons-outlined" id="download_icon" onClick={handleDownload}>file_download</span>
-            </span>
             </div>
         </div>
     </>
